@@ -1,0 +1,18 @@
+{
+  "name": "crowdgenerator",
+  "version": "1.0.0",
+  "description": "Visualizacion de Grupos de Personas",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Crowds",
+    "3D",
+    "Javascript",
+    "Data",
+    "Visualization"
+  ],
+  "author": "jvargasr",
+  "license": "ISC"
+}
