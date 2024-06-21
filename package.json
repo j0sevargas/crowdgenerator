@@ -4,6 +4,7 @@
   "description": "Visualizacion de Grupos de Personas",
   "main": "index.html",
   "scripts": {
+    "start": "serve ./public",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -14,5 +15,8 @@
     "Visualization"
   ],
   "author": "jvargasr",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "serve": "^14.2.3"
+  }
 }
