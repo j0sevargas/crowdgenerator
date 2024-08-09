@@ -9,10 +9,17 @@
       renderer.setSize(window.innerWidth, window.innerHeight);
       document.body.appendChild(renderer.domElement);
 
-      // 2. Agregar iluminacion
-      const light = new THREE.DirectionalLight(0xffffff, 1);
-      light.position.set(0, 1, 1).normalize();
-      scene.add(light);
+    // 2. Agregar iluminacion
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    directionalLight.position.set(0, 1, 1).normalize();
+    scene.add(directionalLight);
+
+    const pointLight = new THREE.PointLight(0xffffff, 0.8);
+    pointLight.position.set(0, 3, 2);
+    scene.add(pointLight);
 
       // 3. Crear la figura 3D (persona) y el plano
       const geometry = new THREE.BoxGeometry();
@@ -31,6 +38,7 @@
 
       // 4. Agregar controles para navegar
       const controls = new OrbitControls(camera, renderer.domElement);
+      controls.maxPolarAngle = Math.PI / 2; // Limita la rotación vertical para que no se pueda mirar debajo del plano
 
       // 5. Crear la funcion de animacion
       function animate() {
