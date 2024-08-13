@@ -4,7 +4,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { SVGLoader } from 'three/addons/loaders/SVGLoader.js';
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
-import { generateSquareRootVertices } from 'generate.js';
+
 
 const displayShadow = false;
 // 1. Inicializar la escena, la camara y el renderizador
@@ -49,7 +49,7 @@ animate(renderer, scene, camera, controls);
 function addPeople(scene) {
 
   const loader = new SVGLoader();
-  loader.load('/images/Person_icon_BLACK-01.svg', function (data) {
+  loader.load('images/Person_icon_BLACK-01.svg', function (data) {
 
     const paths = data.paths;
     const group = new THREE.Group();
@@ -144,7 +144,7 @@ function addIlumination(scene) {
 function generateFloor(scene) {
   // Cargar una textura
   const textureLoader = new THREE.TextureLoader();
-  const texture = textureLoader.load('/images/stone_0104_c.jpg'); // Reemplaza con la ruta a tu imagen de textura
+  const texture = textureLoader.load('images/stone_0104_c.jpg'); // Reemplaza con la ruta a tu imagen de textura
 
   // Crear la geometría del plano
   const planeGeometry = new THREE.PlaneGeometry(100, 100);
@@ -174,7 +174,7 @@ function addText(scene) {
   const z = 0;
 
   const loader = new FontLoader();
-  loader.load('/fonts/helvetiker_bold.typeface.json', function (font) {
+  loader.load('fonts/helvetiker_bold.typeface.json', function (font) {
 
 
     const geometry = new TextGeometry(text, {
@@ -230,6 +230,20 @@ function addText(scene) {
 
 
   });
+}
+
+function generateSquareRootVertices( population , density = 1) {
+  var vertices = [];
+
+  const sqrt = Math.floor(Math.sqrt(population * density));
+  const lowerlimit = sqrt / 2;
+
+  for (var n = (-1 * lowerlimit); n < lowerlimit; n++) {
+      for (var i = (-1 * lowerlimit); i < lowerlimit; i++) {
+          vertices.push([i, n]);
+      }
+  }
+  return vertices;
 }
 
 // 5. Crear la funcion de animacion
