@@ -4,7 +4,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { SVGLoader } from 'three/addons/loaders/SVGLoader.js';
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
-import { generateSquareRootVertices } from '/js/generate.js';
+import { generateSquareRootVertices } from 'generate.js';
 
 const displayShadow = false;
 // 1. Inicializar la escena, la camara y el renderizador
