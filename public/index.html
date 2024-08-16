@@ -2,16 +2,24 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visualizador</title>
-    <style>
-        body {
-            margin: 0;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visualizador</title>
+  <style>
+    body {
+      margin: 0;
+      
+    }
 
-    <script type="importmap">
+    .controls {
+      margin: 10px;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+    }
+  </style>
+
+  <script type="importmap">
     {
       "imports": {
         "three": "https://cdn.jsdelivr.net/npm/three@v0.149.0/build/three.module.js",
@@ -20,13 +28,27 @@
     }
   </script>
 
+  <script>
+
+    function init(){
+
+
+      const populationInput = document.getElementById('population');
+      let population = localStorage.getItem('population') || 1000;
+
+      populationInput.value = population;
+    }
+
+  </script>
 
 </head>
 
-<body>
+<body onload="init()">
 
+  <script type="module" src="js/main.js?v2"></script>
+  <div class="controls"><input type="number" name="population" id="population"><button
+      id="changePopulation">Actualizar</button></div>
 
-    <script type="module" src="js/main.js"></script>
 
 
 </body>

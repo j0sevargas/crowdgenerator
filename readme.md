@@ -4,9 +4,11 @@ Este proyecto es una aplicacion web desarrollada en JavaScript que permite visua
 
 ## Caracteristicas principales a implementar
 
-1. (PENDIENTE) Generación de grupos de personas: La aplicacion permite generar grupos de personas de diferentes tamanos y distribuciones.
-2. (PENDIENTE) Personalizacion de apariencia: Es posible personalizar la apariencia de las personas, como el color de piel, cabello, ropa, entre otros.
-3. Visualización interactiva: Los grupos de personas generados se muestran de forma interactiva, permitiendo hacer zoom, rotar y explorar diferentes angulos de visualizacion.
+1. Generacion de grupos de personas: La aplicacion permite generar grupos de personas de diferentes tamanos y distribuciones.
+2. Visualización interactiva: Los grupos de personas generados se muestran de forma interactiva, permitiendo hacer zoom, rotar y explorar diferentes angulos de visualizacion.
+3. (PENDIENTE) Cambiar la forma en que las personas se presentan.
+4. (PENDIENTE) Limitar poblacion a cientos y miles. Cientos de miles son dificil de manejar.
+5. (PENDIENTE) Visualizacion de millones va a ser dificil, pero no imposible.
 
 ## Como utilizar
 
