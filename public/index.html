@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Visualizador</title>
+  <title>Crowd Generator</title>
   <style>
     body {
       margin: 0;
@@ -16,6 +16,16 @@
       position: absolute;
       top: 10px;
       left: 10px;
+    }
+    .indicators{
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      user-select: none;
+
+    }
+    .monsterAlert{
+      display: none;
     }
   </style>
 
@@ -48,6 +58,10 @@
   <script type="module" src="js/main.js?v2"></script>
   <div class="controls"><input type="number" name="population" id="population"><button
       id="changePopulation">Actualizar</button></div>
+      <div class="indicators">
+        <span id="monsterAlert" class="monsterAlert"><img src="images/warning.png" alt="Monster Alert"></span>
+
+      </div>
 
 
 
