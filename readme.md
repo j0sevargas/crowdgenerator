@@ -2,6 +2,8 @@
 
 Este proyecto es una aplicacion web desarrollada en JavaScript que permite visualizar como lucen grandes grupos de personas de manera grafica.
 
+[Pruebe ahora mismo!](https://j0sevargas.github.io/crowdgenerator/public/index.html)
+
 ## Caracteristicas principales a implementar
 
 1. Generacion de grupos de personas: La aplicacion permite generar grupos de personas de diferentes tamanos y distribuciones.
