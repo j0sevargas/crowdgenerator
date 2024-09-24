@@ -4,7 +4,7 @@
   "description": "Visualizacion de Grupos de Personas",
   "main": "index.html",
   "scripts": {
-    "start": "serve ./public",
+    "start": "serve ./public -c utf-8",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [

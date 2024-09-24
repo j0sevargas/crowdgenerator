@@ -15,8 +15,6 @@ const renderer = new THREE.WebGLRenderer();
 
 //if (displayShadow) renderer.shadowMap.enabled = true; // Habilitar las sombras
 
-let monsterVertex = null;
-
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
@@ -40,8 +38,44 @@ generateTiledFloor(scene, population);
 //addSmallPeople(scene);
 addSmall3dPeople(scene, population, 2);
 
+// 5.0 Determinar el idioma del navegador
+const language = navigator.language || navigator.userLanguage;
+
+
+
+let peopleText = "PEOPLE";
+let updateButtonText = "Update Population";
+
+if (language.includes('es')) {
+  peopleText = 'PERSONAS';
+  updateButtonText = 'Actualizar Población';
+} else if (language.includes('fr')) {
+  peopleText = 'PERSONNES';
+  updateButtonText = 'Mettre à jour la population';
+} else if (language.includes('pt')) {
+  peopleText = 'PESSOAS';
+  updateButtonText = 'Atualizar População';
+} else if (language.includes('de')) {
+  peopleText = 'PERSONEN';
+  updateButtonText = 'Bevölkerung aktualisieren';
+} else if (language.includes('it')) {
+  peopleText = 'PERSONE';
+  updateButtonText = 'Aggiorna popolazione';
+}   else if (language.includes('ja')) {
+  peopleText = '人々';
+  updateButtonText = '人口を更新';
+} else if (language.includes('zh')) {
+  peopleText = '人';
+  updateButtonText = '更新人口';
+} else if (language.includes('ru')) {
+  peopleText = 'ЛЮДИ';
+  updateButtonText = 'Обновить население';
+} 
+
 // 5. Agregar texto en 3D
-addText(scene, `${population} PERSONAS`, 2);
+addText(scene, `${population} ${peopleText}`, 2);
+
+
 
 // 6. Colocar la posicion de la camara
 //camera.position.z = 3;
@@ -51,7 +85,7 @@ camera.position.y = 5;
 
 // 7. Agregar controles para navegar
 const controls = new OrbitControls(camera, renderer.domElement);
-controls.maxPolarAngle = Math.PI / 2; // Limita la rotaci�n vertical para que no se pueda mirar debajo del plano
+controls.maxPolarAngle = Math.PI / 2; // Limita la rotacion vertical para que no se pueda mirar debajo del plano
 
 // 8. Agregar un listener para el evento de resize
 window.addEventListener('resize', () => {
@@ -60,9 +94,14 @@ window.addEventListener('resize', () => {
   camera.updateProjectionMatrix();
 });
 
+const theUpdateButton = document.getElementById('changePopulation');
+  // Etiqueta del boton
+  theUpdateButton.innerText = updateButtonText;
+
 
 // 9. Agregar listener al boton de actualizar
-document.getElementById('changePopulation').addEventListener('click', () => {
+theUpdateButton.addEventListener('click', () => {
+
 
   const newPopulation = document.getElementById('population').value;
   localStorage.setItem('population', newPopulation);
@@ -191,7 +230,7 @@ function addSmallPeople(scene) {
     return sprite;
   });
 
-  // Asignar personas a los v�rtices
+  // Asignar personas a los vertices
   let currentPerson = 0;
   vertices.filter(x => !x.occupied).forEach(vertex => {
     const person = sprites[currentPerson].clone();
@@ -264,8 +303,6 @@ function addIlumination(scene) {
   const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
   directionalLight.position.set(0, 1, 1).normalize();
 
-  //if (displayShadow) directionalLight.castShadow = true;
-
   scene.add(directionalLight);
 
 }
@@ -275,7 +312,7 @@ function generateFloor(scene, population = 100) {
   const textureLoader = new THREE.TextureLoader();
   const texture = textureLoader.load('images/stone_0104_c.jpg'); // Reemplaza con la ruta a tu imagen de textura
 
-  // Crear la geometr�a del plano
+  // Crear la geometria del plano
   const planeGeometry = new THREE.PlaneGeometry(100, 100);
 
   // Crear el material del plano con la textura
