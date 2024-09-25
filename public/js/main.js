@@ -5,71 +5,117 @@ import { SVGLoader } from 'three/addons/loaders/SVGLoader.js';
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 
-  //const displayShadow = false;
-  // 1. Inicializar la escena, la camara y el renderizador
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-  const renderer = new THREE.WebGLRenderer();
-  
-  //if (displayShadow) renderer.shadowMap.enabled = true; // Habilitar las sombras
+//const displayShadow = false;
+// 1. Inicializar la escena, la camara y el renderizador
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer();
 
+
+
+//if (displayShadow) renderer.shadowMap.enabled = true; // Habilitar las sombras
+
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+// solo renderizar lo visible
+renderer.autoClear = false;
+
+//  Establecer el fondo de la escena en color blanco
+scene.background = new THREE.Color(0xffffff);
+
+// Obtener la cantidad de personas de localStorage
+let population = localStorage.getItem('population') || 1000;
+
+// 2. Agregar iluminacion
+addIlumination(scene);
+
+// 3. Agregar un plano para que la persona no flote
+//generateFloor(scene);
+generateTiledFloor(scene, population);
+
+// 4. Crear las personas
+//addSmallPeople(scene);
+addSmall3dPeople(scene, population, 2);
+
+// 5.0 Determinar el idioma del navegador
+const language = navigator.language || navigator.userLanguage;
+
+
+
+let peopleText = "PEOPLE";
+let updateButtonText = "Update Population";
+
+if (language.includes('es')) {
+  peopleText = 'PERSONAS';
+  updateButtonText = 'Actualizar Población';
+} else if (language.includes('fr')) {
+  peopleText = 'PERSONNES';
+  updateButtonText = 'Mettre à jour la population';
+} else if (language.includes('pt')) {
+  peopleText = 'PESSOAS';
+  updateButtonText = 'Atualizar População';
+} else if (language.includes('de')) {
+  peopleText = 'PERSONEN';
+  updateButtonText = 'Bevölkerung aktualisieren';
+} else if (language.includes('it')) {
+  peopleText = 'PERSONE';
+  updateButtonText = 'Aggiorna popolazione';
+}   else if (language.includes('ja')) {
+  peopleText = '人々';
+  updateButtonText = '人口を更新';
+} else if (language.includes('zh')) {
+  peopleText = '人';
+  updateButtonText = '更新人口';
+} else if (language.includes('ru')) {
+  peopleText = 'ЛЮДИ';
+  updateButtonText = 'Обновить население';
+} 
+
+// 5. Agregar texto en 3D
+addText(scene, `${population} ${peopleText}`, 2);
+
+
+
+// 6. Colocar la posicion de la camara
+//camera.position.z = 3;
+// 6.1 zoom out
+camera.position.z = 20;
+camera.position.y = 5;
+
+// 7. Agregar controles para navegar
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.maxPolarAngle = Math.PI / 2; // Limita la rotacion vertical para que no se pueda mirar debajo del plano
+
+// 8. Agregar un listener para el evento de resize
+window.addEventListener('resize', () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
-  document.body.appendChild(renderer.domElement);
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+});
 
-  // solo renderizar lo visible
-  renderer.autoClear = false;
-
-  //  Establecer el fondo de la escena en color blanco
-  scene.background = new THREE.Color(0xffffff);
-
-  // Obtener la cantidad de personas de localStorage
-  let population = localStorage.getItem('population') || 1000;
-
-  // 2. Agregar iluminacion
-  addIlumination(scene);
-
-  // 3. Agregar un plano para que la persona no flote
-  //generateFloor(scene);
-  generateTiledFloor(scene, population);
-
-  // 4. Crear las personas
-  //addSmallPeople(scene);
-  addSmall3dPeople(scene, population, 2);
-
-  // 5. Agregar texto en 3D
-  addText(scene,`${population} PERSONAS`, 2); 
-
-  // 6. Colocar la posicion de la camara
-  //camera.position.z = 3;
-  // 6.1 zoom out
-  camera.position.z = 20;
-  camera.position.y = 5;
-
-  // 7. Agregar controles para navegar
-  const controls = new OrbitControls(camera, renderer.domElement);
-  controls.maxPolarAngle = Math.PI / 2; // Limita la rotaci�n vertical para que no se pueda mirar debajo del plano
-
-  // 8. Agregar un listener para el evento de resize
-  window.addEventListener('resize', () => {
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-  });
+const theUpdateButton = document.getElementById('changePopulation');
+  // Etiqueta del boton
+  theUpdateButton.innerText = updateButtonText;
 
 
-  // 9. Agregar listener al boton de actualizar
-  document.getElementById('changePopulation').addEventListener('click', () => {
-
-    const newPopulation = document.getElementById('population').value;
-    localStorage.setItem('population', newPopulation);
-    window.location = window.location;
-
-  });
-   
+// 9. Agregar listener al boton de actualizar
+theUpdateButton.addEventListener('click', () => {
 
 
-  // 10. Llamar a la funcion de animacion
-  animate(renderer, scene, camera, controls);
+  const newPopulation = document.getElementById('population').value;
+  localStorage.setItem('population', newPopulation);
+  window.location = window.location;
+
+});
+
+
+
+// 10. Llamar a la funcion de animacion
+animate(renderer, scene, camera, controls);
+
+
+
 
 
 
@@ -77,47 +123,89 @@ function addSmall3dPeople(scene, population = 100, multiplier = 1) {
 
   const vertices = generateSquareRootVertices(population, 1);
   const numberOfPeople = 23;
+  const monsters = 4;
   const loader = new THREE.TextureLoader();
 
-  // Cargar todas las texturas de personas
+  // load all person textures and monsters
   const textures = [];
-  for (let i = 1; i <= numberOfPeople; i++) {
-    textures.push(loader.load(`images/person${i}.png`));
+  const promises = [];
+
+  for (let i = 1; i <= numberOfPeople + monsters; i++) {
+
+    promises.push(new Promise((resolve, reject) => {
+      textures.push(loader.load(`images/person${i}.png`, resolve));
+    }));
+
   }
 
-  // Crear materiales y sprites para cada textura
-  const planes = textures.map(texture => {
+  Promise.all(promises).then(() => {
 
-    texture.minFilter = THREE.LinearFilter;
-    texture.magFilter = THREE.NearestFilter;
 
-    // Transparencia de la textura
-    texture.format = THREE.RGBAFormat;
-    texture.alphaTest = 0.5;
-    const planeGeometry = new THREE.PlaneGeometry(1, 2, 1, 1);
-    // Crear el material del plano con la textura que tenga transparencia
-    const planeMaterial = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide, transparent: true });
-    const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+    // Crear materiales y sprites para cada textura
+    const planes = textures.map(texture => {
 
-   // if (displayShadow) plane.castShadow = true;
+      texture.minFilter = THREE.LinearFilter;
+      texture.magFilter = THREE.NearestFilter;
 
-    return plane;
+      // Transparencia de la textura
+      texture.format = THREE.RGBAFormat;
+      texture.alphaTest = 0.5;
+      const planeGeometry = new THREE.PlaneGeometry(1, 2, 1, 1);
+      // Crear el material del plano con la textura que tenga transparencia
+      const planeMaterial = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide, transparent: true });
+      const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+
+      // if (displayShadow) plane.castShadow = true;
+
+      return plane;
+    });
+
+
+    let monsterAppeared = false;
+
+
+    vertices.filter(x => !x.occupied).forEach(vertex => {
+
+      let currentPerson = 0;
+      // set monsterVertex to a random number between 24 and 27 only if a random number between 1 and 100 is prime and if there are no other monsters
+      if (isPrime(Math.floor(Math.random() * 100)) && !monsterAppeared) {
+        currentPerson = Math.floor(Math.random() * monsters) + numberOfPeople; // Uno de los monstruos 24, 25, 26, 27
+      } else {
+        // set currentPerson to a random number between 1 and 23
+        currentPerson = Math.floor(Math.random() * numberOfPeople);
+      }
+
+      const plane = planes[currentPerson].clone();
+      plane.position.set(vertex.x * multiplier, 0, vertex.y * multiplier);
+      vertex.occupied = true;
+      scene.add(plane);
+
+
+
+      //add listener to the monster
+      if (currentPerson >= numberOfPeople) {
+
+        monsterAppeared = true;
+        vertex.monster = true;
+        plane.userData = { monster: true };
+
+        // make the person glow when the mouse is over it
+        // plane.addEventListener('mouseover', () => {
+        //   plane.material.color.setHex(0xff0000);
+        //   console.log("mouseover",plane);
+        // });
+
+        document.getElementById('monsterAlert').style.display = 'block';
+
+      }
+
+    });
+
   });
 
 
 
-  // Asignar personas a los v�rtices
-  let currentPerson = 0;
-  vertices.filter(x => !x.occupied).forEach(vertex => {
-    const plane = planes[currentPerson].clone();
-    plane.position.set(vertex.x * multiplier, 0, vertex.y * multiplier);
-    vertex.occupied = true;
-    scene.add(plane);
 
-    // set currentPerson to a random number between 1 and 23
-    currentPerson = Math.floor(Math.random() * 23);
-
-  });
 }
 
 
@@ -142,7 +230,7 @@ function addSmallPeople(scene) {
     return sprite;
   });
 
-  // Asignar personas a los v�rtices
+  // Asignar personas a los vertices
   let currentPerson = 0;
   vertices.filter(x => !x.occupied).forEach(vertex => {
     const person = sprites[currentPerson].clone();
@@ -215,8 +303,6 @@ function addIlumination(scene) {
   const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
   directionalLight.position.set(0, 1, 1).normalize();
 
-  //if (displayShadow) directionalLight.castShadow = true;
-
   scene.add(directionalLight);
 
 }
@@ -226,7 +312,7 @@ function generateFloor(scene, population = 100) {
   const textureLoader = new THREE.TextureLoader();
   const texture = textureLoader.load('images/stone_0104_c.jpg'); // Reemplaza con la ruta a tu imagen de textura
 
-  // Crear la geometr�a del plano
+  // Crear la geometria del plano
   const planeGeometry = new THREE.PlaneGeometry(100, 100);
 
   // Crear el material del plano con la textura
@@ -268,7 +354,7 @@ function generateTiledFloor(scene, population = 100, multiplier = 2) {
   scene.add(plane);
 }
 
-function addText(scene, text='3 MILLONES') {
+function addText(scene, text = '3 MILLONES') {
 
 
   //Centrar el texto en la escena
@@ -312,7 +398,7 @@ function generateSquareRootVertices(population) {
 
   for (var n = (-1 * lowerlimit); n < lowerlimit; n++) {
     for (var i = (-1 * lowerlimit); i < lowerlimit; i++) {
-      vertices.push({ "x": i, "y": n, "occupied": false });
+      vertices.push({ "x": i, "y": n, "occupied": false, "monster": false });
     }
   }
 
@@ -320,7 +406,7 @@ function generateSquareRootVertices(population) {
 
   // place the remaining vertices randomly
   for (var i = 0; i < remaining; i++) {
-    vertices.push({ "x": Math.floor(Math.random() * lowerlimit) + 1, "y": Math.floor(Math.random() * lowerlimit) + 1, "occupied": false });
+    vertices.push({ "x": Math.floor(Math.random() * lowerlimit) + 1, "y": Math.floor(Math.random() * lowerlimit) + 1, "occupied": false, "monster": false });
     //vertices.push({ "x": lowerlimit, "y": (-1 * lowerlimit) + i, "occupied": false });
   }
 
@@ -332,4 +418,10 @@ function animate() {
   requestAnimationFrame(animate);
   controls.update(); // solo necesario si los controles.enableDamping o controls.autoRotate estan habilitados
   renderer.render(scene, camera);
+}
+
+function isPrime(num = 1) {
+  const primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97];
+  return primes.includes(num);
+
 }
